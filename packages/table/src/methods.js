@@ -1701,7 +1701,7 @@ const Methods = {
           console.log('keyDown Arrow =>')
 
           if (selected.row && selected.column) {
-            this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+            // this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
           } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
             // 当前行按键上下移动
             console.log('start to Move =>')
