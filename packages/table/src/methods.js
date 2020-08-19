@@ -69,6 +69,27 @@ function handleReserveRow (_vm, reserveRowMap) {
   return reserveList
 }
 
+function travelWrap (treeArr) {
+  const flatList = []
+
+  const _travel = function (_Tr) {
+    // console.log('[tree] found level total num = %d, start travel', _Tr.length)
+    for (const el of _Tr) {
+      const { _XID, children } = el
+      flatList.push(_XID)
+      // console.log('[tree] push id = %s', _XID)
+      if (children) {
+        _travel(children)
+      }
+    }
+    // console.log('[tree] found return upstairs')
+  }
+
+  _travel(treeArr)
+
+  return flatList
+}
+
 const Methods = {
   /**
    * 获取父容器元素
@@ -722,7 +743,9 @@ const Methods = {
         }
       }
     }
+
     this.afterFullData = tableData
+    this.afterFlat = travelWrap(this.afterFullData)
     return tableData
   },
   /**
@@ -1638,6 +1661,7 @@ const Methods = {
           } else {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
+              console.log('active =>')
               if (isShiftKey) {
                 this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
               } else {
@@ -1645,6 +1669,8 @@ const Methods = {
               }
             } else if (treeConfig && highlightCurrentRow && currentRow) {
               // 如果是树形表格当前行回车移动到子节点
+              console.log('entor to deeper =>')
+
               const childrens = currentRow[treeOpts.children]
               if (childrens && childrens.length) {
                 evnt.preventDefault()
@@ -1672,10 +1698,14 @@ const Methods = {
           }
         } else if (operArrow && keyboardConfig.isArrow) {
           // 如果按下了方向键
+          console.log('keyDown Arrow =>')
+
           if (selected.row && selected.column) {
             this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
           } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
             // 当前行按键上下移动
+            console.log('start to Move =>')
+
             this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
           }
         } else if (isTab && keyboardConfig.isTab) {
@@ -1694,6 +1724,8 @@ const Methods = {
             }
           } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
             // 如果树形表格回退键关闭当前行返回父节点
+            console.log('spaceback back to parent =>')
+
             const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
             if (parentRow) {
               evnt.preventDefault()
