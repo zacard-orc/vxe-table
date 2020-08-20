@@ -230,8 +230,10 @@ export default {
           return
         }
 
-        params.rowIndex = _rowIndex - 1
-        params.row = afterFullData[params.rowIndex]
+        if (_rowIndex > 0) {
+          params.rowIndex = _rowIndex - 1
+          params.row = afterFullData[params.rowIndex]
+        }
       } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
         // 移动到下一行
         if (treeConfig) {
