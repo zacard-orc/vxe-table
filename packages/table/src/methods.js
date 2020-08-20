@@ -36,6 +36,27 @@ function handleReserveRow (_vm, list) {
   return list.filter(row => fullAllDataRowMap.has(row))
 }
 
+function travelWrap (treeArr) {
+  const flatList = []
+
+  const _travel = function (_Tr) {
+    // console.log('[tree] found level total num = %d, start travel', _Tr.length)
+    for (const el of _Tr) {
+      const { _XID, children } = el
+      flatList.push(_XID)
+      // console.log('[tree] push id = %s', _XID)
+      if (children) {
+        _travel(children)
+      }
+    }
+    // console.log('[tree] found return upstairs')
+  }
+
+  _travel(treeArr)
+
+  return flatList
+}
+
 const Methods = {
   /**
    * 获取父容器元素
@@ -717,6 +738,7 @@ const Methods = {
       }
     }
     this.afterFullData = tableData
+    this.afterFlat = travelWrap(this.afterFullData)
     return tableData
   },
   /**
@@ -1739,6 +1761,8 @@ const Methods = {
           }
         } else if (operArrow && keyboardConfig.isArrow) {
           // 如果按下了方向键
+          console.log('keyDown Arrow =>')
+
           if (selected.row && selected.column) {
             this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
           } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {

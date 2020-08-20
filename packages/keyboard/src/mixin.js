@@ -155,17 +155,122 @@ export default {
     },
     // 处理可编辑方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      const { afterFullData, visibleColumn, isSeqColumn } = this
+      const {
+        afterFullData, visibleColumn, isSeqColumn,
+        currentRow, treeConfig, treeOpts, afterFlat
+      } = this
+
       const params = Object.assign({}, args)
       const _rowIndex = this._getRowIndex(params.row)
       const _columnIndex = this._getColumnIndex(params.column)
       evnt.preventDefault()
-      if (isUpArrow && _rowIndex > 0) {
+      if (isUpArrow) {
         // 移动到上一行
+        if (treeConfig) {
+          let upLim = 0
+          let downLim = 999
+
+          if (treeConfig.navColumn) {
+            upLim = treeConfig.navColumn[0]
+            downLim = treeConfig.navColumn[1]
+          }
+
+          if (
+            _columnIndex >= upLim &&
+            _columnIndex <= downLim
+          ) {
+            const { index, items } = XEUtils.findTree(
+              this.afterFullData,
+              item => item === currentRow, treeOpts)
+
+            if (index === 0) {
+              // 折叠
+              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
+              if (parentRow) {
+                params.$table = this
+                params.row = parentRow
+                this.setTreeExpand(parentRow, false)
+                  .then(() => this.scrollToRow(parentRow))
+                  .then(() => {
+                    this.triggerCurrentRowEvent(evnt, params)
+                    params.cell = DomTools.getCell(this, params)
+                    this.handleSelected(params, evnt)
+                  })
+              }
+            } else {
+              const prevRow = items[index - 1]
+              if (prevRow) {
+                params.$table = this
+                params.row = prevRow
+
+                this.scrollToRow(prevRow)
+                  .then(() => {
+                    this.triggerCurrentRowEvent(evnt, params)
+                    params.cell = DomTools.getCell(this, params)
+                    this.handleSelected(params, evnt)
+                  })
+              }
+            }
+          }
+          return
+        }
+
         params.rowIndex = _rowIndex - 1
         params.row = afterFullData[params.rowIndex]
       } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
         // 移动到下一行
+        if (treeConfig) {
+          let upLim = 0
+          let downLim = 999
+
+          if (treeConfig.navColumn) {
+            upLim = treeConfig.navColumn[0]
+            downLim = treeConfig.navColumn[1]
+          }
+
+          if (
+            _columnIndex >= upLim &&
+            _columnIndex <= downLim
+          ) {
+            const childrens = currentRow[treeOpts.children]
+            if (childrens && childrens.length) {
+              evnt.preventDefault()
+              const targetRow = childrens[0]
+
+              params.$table = this
+              params.row = targetRow
+
+              this.setTreeExpand(currentRow, true)
+                .then(() => this.scrollToRow(targetRow))
+                .then(() => {
+                  this.triggerCurrentRowEvent(evnt, params)
+                  params.cell = DomTools.getCell(this, params)
+                  this.handleSelected(params, evnt)
+                })
+              return
+            } else {
+              const curIdx = afterFlat.findIndex((el) => el === currentRow._XID)
+              if (curIdx < afterFlat.length - 1) {
+                const { item } = XEUtils.findTree(
+                  this.afterFullData,
+                  item => item._XID === afterFlat[curIdx + 1], treeOpts)
+
+                params.$table = this
+                params.row = item
+
+                this.scrollToRow(item)
+                  .then(() => {
+                    this.triggerCurrentRowEvent(evnt, params)
+                    params.cell = DomTools.getCell(this, params)
+                    this.handleSelected(params, evnt)
+                  })
+                return
+              }
+            }
+          }
+          return
+        }
+
         params.rowIndex = _rowIndex + 1
         params.row = afterFullData[params.rowIndex]
       } else if (isLeftArrow && _columnIndex) {
@@ -185,7 +290,11 @@ export default {
           }
         }
       }
+
+      console.log('cell mode to move =>')
+
       this.scrollToRow(params.row, params.column).then(() => {
+        this.triggerCurrentRowEvent(evnt, params)
         params.cell = DomTools.getCell(this, params)
         this.handleSelected(params, evnt)
       })

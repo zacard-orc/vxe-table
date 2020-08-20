@@ -8,8 +8,14 @@
     <vxe-table
       highlight-current-row
       :data="tableData"
-      :tree-config="{children: 'children'}"
-      :keyboard-config="{isArrow: true, isEnter: true}">
+      :tree-config="{children: 'children',navColumn: [2,3]}"
+      :mouse-config="{selected: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+      :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+      :checkbox-config="{range: true}"
+    >
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
