@@ -1761,7 +1761,6 @@ const Methods = {
           }
         } else if (operArrow && keyboardConfig.isArrow) {
           // 如果按下了方向键
-          console.log('keyDown Arrow =>')
 
           if (selected.row && selected.column) {
             this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)

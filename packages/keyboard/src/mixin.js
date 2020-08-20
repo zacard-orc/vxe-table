@@ -211,6 +211,21 @@ export default {
                   })
               }
             }
+          } else {
+            // 非导航列，执行同级-上移动
+            const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
+
+            if (index > 0) {
+              params.$table = this
+              params.row = items[index - 1]
+
+              this.scrollToRow(items[index - 1])
+                .then(() => {
+                  this.triggerCurrentRowEvent(evnt, params)
+                  params.cell = DomTools.getCell(this, params)
+                  this.handleSelected(params, evnt)
+                })
+            }
           }
           return
         }
@@ -267,6 +282,21 @@ export default {
                 return
               }
             }
+          } else {
+            // 非导航列，执行同级-下移动
+            const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
+
+            if (index < items.length - 1) {
+              params.$table = this
+              params.row = items[index + 1]
+
+              this.scrollToRow(items[index + 1])
+                .then(() => {
+                  this.triggerCurrentRowEvent(evnt, params)
+                  params.cell = DomTools.getCell(this, params)
+                  this.handleSelected(params, evnt)
+                })
+            }
           }
           return
         }
@@ -290,8 +320,6 @@ export default {
           }
         }
       }
-
-      console.log('cell mode to move =>')
 
       this.scrollToRow(params.row, params.column).then(() => {
         this.triggerCurrentRowEvent(evnt, params)
