@@ -8,7 +8,7 @@
     <vxe-table
       highlight-current-row
       :data="tableData"
-      :tree-config="{children: 'children', navColumn:[2,3]}"
+      :tree-config="{children: 'children', navColumn:[2,someColIdx]}"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
@@ -46,6 +46,7 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
+      someColIdx: 4,
       tableData: [],
       selectRow: null,
       demoCodes: [
