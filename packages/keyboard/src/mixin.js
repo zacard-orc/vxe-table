@@ -181,41 +181,38 @@ export default {
             _columnIndex >= upLim &&
             _columnIndex <= downLim
           ) {
-            const { index, items } = XEUtils.findTree(
+            const { index, items, parent: parentRow } = XEUtils.findTree(
               this.afterFullData,
               item => item === currentRow, treeOpts)
 
-            if (index === 0) {
-              // 折叠
-              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
-              if (parentRow) {
-                params.$table = this
-                params.row = parentRow
-                // this.setTreeExpand(parentRow, false)
-                //   .then(() => this.scrollToRow(parentRow))
-                //   .then(() => {
-                //     this.triggerCurrentRowEvent(evnt, params)
-                //     params.cell = DomTools.getCell(this, params)
-                //     this.handleSelected(params, evnt)
-                //   })
-                //   this.setTreeExpand(parentRow, false)
-                //   .then(() => this.scrollToRow(parentRow))
-                //   .then(() => {
-                //     this.triggerCurrentRowEvent(evnt, params)
-                //     params.cell = DomTools.getCell(this, params)
-                //     this.handleSelected(params, evnt)
-                //   })
+            const curIdx = afterFlat.findIndex((el) => el === currentRow[_rowKeyName])
 
-                this.scrollToRow(parentRow)
-                  .then(() => {
-                    this.triggerCurrentRowEvent(evnt, params)
-                    params.cell = DomTools.getCell(this, params)
-                    this.handleSelected(params, evnt)
-                  })
+            if (curIdx > 0) {
+              const prevObj = XEUtils.findTree(
+                this.afterFullData,
+                item => item[_rowKeyName] === afterFlat[curIdx - 1], treeOpts)
+
+              const prevRow = prevObj.item
+
+              params.$table = this
+              params.row = prevRow
+
+              if (index === 0) {
+                if (parentRow) {
+                  params.$table = this
+                  params.row = parentRow
+
+                  this.scrollToRow(parentRow)
+                    .then(() => {
+                      this.triggerCurrentRowEvent(evnt, params)
+                      params.cell = DomTools.getCell(this, params)
+                      this.handleSelected(params, evnt)
+                    })
+                }
+                return
               }
-            } else {
-              const prevRow = items[index - 1]
-              if (prevRow) {
+
+              if (prevRow[_rowKeyName] === items[index - 1][_rowKeyName]) {
                 params.$table = this
                 params.row = prevRow
 
@@ -225,7 +222,43 @@ export default {
                     params.cell = DomTools.getCell(this, params)
                     this.handleSelected(params, evnt)
                   })
+              } else {
+                /*
+                 xeutil => obj | parent
+                 obj.item => row | row_id
+                 obj.parent => row | row_id
+                 */
+
+                const parentPath = []
+                let tmpParentRow = prevObj.parent
+
+                while (true) {
+                  parentPath.push(tmpParentRow)
+                  if (tmpParentRow[_rowKeyName] === items[index - 1][_rowKeyName]) {
+                    break
+                  }
+
+                  const { parent: _xparent } = XEUtils.findTree(
+                    this.afterFullData,
+                    item => item === tmpParentRow, treeOpts)
+
+                  tmpParentRow = _xparent
+                }
+
+                parentPath.reverse()
+
+                parentPath.forEach(el => {
+                  this.setTreeExpand(el, false).then().catch()
+                })
+
+                this.scrollToRow(prevRow)
+                  .then(() => {
+                    this.triggerCurrentRowEvent(evnt, params)
+                    params.cell = DomTools.getCell(this, params)
+                    this.handleSelected(params, evnt)
+                  })
               }
+              return
             }
           } else {
             // 非导航列，执行同级-上移动
