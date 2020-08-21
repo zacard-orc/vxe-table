@@ -36,14 +36,15 @@ function handleReserveRow (_vm, list) {
   return list.filter(row => fullAllDataRowMap.has(row))
 }
 
-function travelWrap (treeArr) {
+function travelWrap (treeArr, rowKey) {
   const flatList = []
 
   const _travel = function (_Tr) {
     // console.log('[tree] found level total num = %d, start travel', _Tr.length)
     for (const el of _Tr) {
-      const { _XID, children } = el
-      flatList.push(_XID)
+      const { children } = el
+      const rowId = el[rowKey]
+      flatList.push(rowId)
       // console.log('[tree] push id = %s', _XID)
       if (children) {
         _travel(children)
@@ -738,7 +739,7 @@ const Methods = {
       }
     }
     this.afterFullData = tableData
-    this.afterFlat = travelWrap(this.afterFullData)
+    this.afterFlat = travelWrap(this.afterFullData, UtilTools.getRowkey(this))
     return tableData
   },
   /**

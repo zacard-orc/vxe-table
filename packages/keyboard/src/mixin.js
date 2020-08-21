@@ -160,6 +160,8 @@ export default {
         currentRow, treeConfig, treeOpts, afterFlat
       } = this
 
+      const _rowKeyName = UtilTools.getRowkey(this)
+
       const params = Object.assign({}, args)
       const _rowIndex = this._getRowIndex(params.row)
       const _columnIndex = this._getColumnIndex(params.column)
@@ -266,11 +268,11 @@ export default {
                 })
               return
             } else {
-              const curIdx = afterFlat.findIndex((el) => el === currentRow._XID)
+              const curIdx = afterFlat.findIndex((el) => el === currentRow[_rowKeyName])
               if (curIdx < afterFlat.length - 1) {
                 const { item } = XEUtils.findTree(
                   this.afterFullData,
-                  item => item._XID === afterFlat[curIdx + 1], treeOpts)
+                  item => item[_rowKeyName] === afterFlat[curIdx + 1], treeOpts)
 
                 params.$table = this
                 params.row = item

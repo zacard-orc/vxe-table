@@ -8,7 +8,7 @@
     <vxe-table
       highlight-current-row
       :data="tableData"
-      :tree-config="{children: 'children',navColumn: [2,3]}"
+      :tree-config="{children: 'children',navColumn: [2,2]}"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
@@ -16,10 +16,14 @@
     >
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-table-column field="ljmc" title="零件名称" tree-node></vxe-table-column>
+      <vxe-table-column field="cl" title="材料"></vxe-table-column>
+      <vxe-table-column field="gy" title="工艺"></vxe-table-column>
+      <vxe-table-column field="djzl" title="单件重量"></vxe-table-column>
+<!--      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>-->
+<!--      <vxe-table-column field="size" title="Size"></vxe-table-column>-->
+<!--      <vxe-table-column field="type" title="Type"></vxe-table-column>-->
+<!--      <vxe-table-column field="date" title="Date"></vxe-table-column>-->
     </vxe-table>
 
     <pre>
@@ -31,12 +35,12 @@
       </code>
     </pre>
 
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+<!--    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>-->
 
-    <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-    </pre>
+<!--    <pre>-->
+<!--      <code class="xml">{{ demoCodes[0] }}</code>-->
+<!--      <code class="javascript">{{ demoCodes[1] }}</code>-->
+<!--    </pre>-->
   </div>
 </template>
 
@@ -49,36 +53,78 @@ export default {
     return {
       tableData: [],
       selectRow: null,
-      demoCodes: [
-        `
-        <vxe-table
-          highlight-current-row
-          :data="tableData"
-          :tree-config="{children: 'children'}"
-          :keyboard-config="{isArrow: true, isEnter: true}">
-          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
-        </vxe-table>
-        `,
-        `
-        export default {
-          data () {
-            return {
-              tableData: []
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
-          }
-        }
-        `
-      ]
+      demoCodes: []
     }
   },
   created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    // this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = [
+      {
+        // id: 1000,
+        ljmc: '新风口',
+        cl: ' 金属',
+        gy: '铰链冲压计算公式',
+        djzl: '1.5',
+        children: [
+          {
+            // id: 1100,
+            // parentId: 1000,
+            ljmc: '新风口密封条',
+            cl: ' 金属',
+            gy: '铰链冲压计算公式',
+            djzl: '1.5'
+          }, {
+            // id: 1200,
+            // parentId: 1000,
+            ljmc: '螺钉-内外循环内门执行器',
+            cl: ' 金属',
+            gy: '铰链冲压计算公式',
+            djzl: '1.5'
+          }
+        ]
+      },
+      {
+        // id: 2000,
+        ljmc: '螺钉-新风口到鼓机单元',
+        cl: ' 金属',
+        gy: '铰链冲压计算公式',
+        djzl: '1.5'
+      },
+      {
+        // id: 3000,
+        ljmc: '新风口',
+        cl: ' 金属',
+        gy: '铰链冲压计算公式',
+        djzl: '1.5',
+        children: [
+          {
+            ljmc: '新风口密封条',
+            cl: ' 金属',
+            gy: '铰链冲压计算公式',
+            djzl: '1.5'
+          }, {
+            ljmc: '螺钉-内外循环内门执行器',
+            cl: ' 金属',
+            gy: '铰链冲压计算公式',
+            djzl: '1.5'
+          }
+        ]
+      },
+      {
+        // id: 4000,
+        ljmc: '新风单元及蒸发器单元',
+        cl: ' 塑料',
+        gy: '铰链冲压计算公式',
+        djzl: '1.5'
+      },
+      {
+        // id: 5000,
+        ljmc: '新风单元及蒸发器单元',
+        cl: ' 塑料',
+        gy: '铰链冲压计算公式',
+        djzl: '1.5'
+      }
+    ]
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
