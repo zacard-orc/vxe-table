@@ -40,17 +40,14 @@ function travelWrap (treeArr, rowKey) {
   const flatList = []
 
   const _travel = function (_Tr) {
-    // console.log('[tree] found level total num = %d, start travel', _Tr.length)
     for (const el of _Tr) {
       const { children } = el
       const rowId = el[rowKey]
       flatList.push(rowId)
-      // console.log('[tree] push id = %s', _XID)
       if (children) {
         _travel(children)
       }
     }
-    // console.log('[tree] found return upstairs')
   }
 
   _travel(treeArr)
