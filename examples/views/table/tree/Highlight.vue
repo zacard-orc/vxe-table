@@ -8,7 +8,7 @@
     <vxe-table
       highlight-current-row
       :data="tableData"
-      :tree-config="{children: 'children',navColumn: [2,2]}"
+      :tree-config="{children: 'children', navColumn: [2,2]}"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
@@ -17,9 +17,9 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="ljmc" title="零件名称" tree-node></vxe-table-column>
-      <vxe-table-column field="cl" title="材料"></vxe-table-column>
-      <vxe-table-column field="gy" title="工艺"></vxe-table-column>
-      <vxe-table-column field="djzl" title="单件重量"></vxe-table-column>
+      <vxe-table-column field="cl" title="材料" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="gy" title="工艺" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="djzl" title="单件重量" :edit-render="{name: 'input'}"></vxe-table-column>
 <!--      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>-->
 <!--      <vxe-table-column field="size" title="Size"></vxe-table-column>-->
 <!--      <vxe-table-column field="type" title="Type"></vxe-table-column>-->
