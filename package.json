@@ -1,7 +1,7 @@
 {
-  "name": "vxe-table",
-  "version": "2.9.14",
-  "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...",
+  "name": "zacard-vxe-table",
+  "version": "2.9.8",
+  "description": "(cover vxe-table) 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...",
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
@@ -106,7 +106,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/x-extends/vxe-table.git"
+    "url": "git+https://github.com/zacard-orc/vxe-table.git"
   },
   "keywords": [
     "vxe-table",
@@ -115,14 +115,14 @@
     "vue grid"
   ],
   "author": {
-    "name": "Xu Liangzhan",
-    "email": "xu_liangzhan@163.com"
+    "name": "zacard cover Xu Liangzhan",
+    "email": "llysonylin2012@163.com cover xu_liangzhan@163.com"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/x-extends/vxe-table/issues"
+    "url": "https://github.com/zacard-orc/vxe-table/issues"
   },
-  "homepage": "https://github.com/x-extends/vxe-table#readme",
+  "homepage": "https://github.com/zacard-orc/vxe-table#readme",
   "browserslist": [
     "> 1%",
     "last 2 versions"

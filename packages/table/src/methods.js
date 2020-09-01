@@ -36,6 +36,25 @@ function handleReserveRow (_vm, list) {
   return list.filter(row => fullAllDataRowMap.has(row))
 }
 
+function travelWrap (treeArr, rowKey) {
+  const flatList = []
+
+  const _travel = function (_Tr) {
+    for (const el of _Tr) {
+      const { children } = el
+      const rowId = el[rowKey]
+      flatList.push(rowId)
+      if (children) {
+        _travel(children)
+      }
+    }
+  }
+
+  _travel(treeArr)
+
+  return flatList
+}
+
 const Methods = {
   /**
    * 获取父容器元素
@@ -717,6 +736,7 @@ const Methods = {
       }
     }
     this.afterFullData = tableData
+    this.afterFlat = travelWrap(this.afterFullData, UtilTools.getRowkey(this))
     return tableData
   },
   /**
@@ -1739,6 +1759,7 @@ const Methods = {
           }
         } else if (operArrow && keyboardConfig.isArrow) {
           // 如果按下了方向键
+
           if (selected.row && selected.column) {
             this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
           } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {

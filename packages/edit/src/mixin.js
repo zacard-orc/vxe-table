@@ -406,9 +406,17 @@ export default {
       const isMouseSelected = mouseConfig && mouseOpts.selected
       // 在 v3.0 中废弃 mouse-config.checked
       const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+
+      console.log('000 =>')
+
       const selectMethod = () => {
         if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
+          console.log('000-a =>')
+          console.log((actived.row !== row))
+          console.log((editOpts.mode === 'cell' ? actived.column !== column : false))
+
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
+            console.log('aaa =>')
             if (this.keyboardConfig) {
               this.clearChecked(evnt)
               this.clearIndexChecked()
@@ -432,8 +440,26 @@ export default {
               this.handleIndexChecked([[cell.parentNode.querySelector('.col--seq')]])
             }
             this.focus()
+          } else {
+            console.log('bbb =>')
+            if (this.keyboardConfig) {
+              this.clearChecked(evnt)
+              this.clearIndexChecked()
+              this.clearHeaderChecked()
+              this.clearSelected(evnt)
+            }
+            this.clearActived(evnt)
+            selected.args = params
+
+            selected.row = row
+            selected.column = column
+            if (isMouseSelected) {
+              this.addColSdCls()
+            }
           }
         }
+        console.log('ccc =>')
+
         return this.$nextTick()
       }
       return selectMethod()
