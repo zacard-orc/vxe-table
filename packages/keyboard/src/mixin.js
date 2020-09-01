@@ -349,6 +349,17 @@ export default {
             //     })
             // }
           }
+          params.rowIndex = _rowIndex
+          params.row = afterFullData[params.rowIndex]
+
+          console.log(params.column)
+
+          this.scrollToRow(params.row, params.column).then(() => {
+            this.triggerCurrentRowEvent(evnt, params)
+            params.cell = DomTools.getCell(this, params)
+            this.handleSelected(params, evnt)
+          })
+
           return
         }
 
