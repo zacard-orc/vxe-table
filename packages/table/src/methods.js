@@ -1776,19 +1776,38 @@ const Methods = {
         } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
           // 如果是删除键
           if (keyboardConfig.isDel && (selected.row || selected.column)) {
-            UtilTools.setCellValue(selected.row, selected.column, null)
+            if (!keyboardConfig) {
+              UtilTools.setCellValue(selected.row, selected.column, null)
+            }
             if (isBack) {
               this.handleActived(selected.args, evnt)
             }
           } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
             // 如果树形表格回退键关闭当前行返回父节点
-            const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
-            if (parentRow) {
-              evnt.preventDefault()
-              params = { $table: this, row: parentRow }
-              this.setTreeExpand(parentRow, false)
-                .then(() => this.scrollToRow(parentRow))
-                .then(() => this.triggerCurrentRowEvent(evnt, params))
+            // 编辑状态下
+
+            let upLim = 0
+            let downLim = 999
+
+            if (treeConfig.navColumn) {
+              upLim = treeConfig.navColumn[0]
+              downLim = treeConfig.navColumn[1]
+            }
+
+            const _columnIndex = this._getColumnIndex(selected.args.column)
+
+            if (
+              _columnIndex >= upLim &&
+              _columnIndex <= downLim
+            ) {
+              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
+              if (parentRow) {
+                evnt.preventDefault()
+                params = { $table: this, row: parentRow }
+                this.setTreeExpand(parentRow, false)
+                  .then(() => this.scrollToRow(parentRow))
+                  .then(() => this.triggerCurrentRowEvent(evnt, params))
+              }
             }
           }
         } else if (keyboardConfig.isCut && isCtrlKey && (isA || isX || isC || isV)) {
