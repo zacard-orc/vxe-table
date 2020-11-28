@@ -33,6 +33,10 @@ export interface ExportOptons {
    */
   mode?: string;
   /**
+   * 输出数据的方式
+   */
+  alignSeqPrefix?: string;
+  /**
    * 输出数据的方式列表
    */
   modes?: string[];

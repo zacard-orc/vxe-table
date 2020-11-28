@@ -19,7 +19,7 @@
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
       :checkbox-config="{range: true}"
     >
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" title="编号" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="ljmc" title="零件名称" tree-node></vxe-table-column>
       <vxe-table-column field="cl" title="材料" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -112,7 +112,8 @@ export default {
             djzl: '1.5',
             role: 1,
             ddtime: '2020-03-01'
-          }, {
+          },
+          {
             // id: 1200,
             // parentId: 1000,
             ljmc: '螺钉-内外循环内门执行器a',
@@ -131,7 +132,7 @@ export default {
                 ddtime: '2020-05-01'
               },
               {
-                ljmc: '螺钉-内外循环内门执行器aa',
+                ljmc: '螺钉-内外循环内门执行器bb',
                 cl: ' 金属',
                 gy: '铰链冲压计算公式',
                 djzl: '1.5',
@@ -159,7 +160,25 @@ export default {
         gy: '铰链冲压计算公式',
         djzl: '1.5',
         role: 1,
-        ddtime: '2020-09-01'
+        ddtime: '2020-09-01',
+        children: [
+          {
+            ljmc: '多米尼克',
+            cl: '塑料',
+            gy: '微信啦啦啦啦',
+            djzl: '1.6',
+            role: 3,
+            ddtime: '2020-09-01'
+          },
+          {
+            ljmc: '多米尼克5555',
+            cl: '塑料',
+            gy: '微信啦啦啦啦',
+            djzl: '1.7',
+            role: 2,
+            ddtime: '2020-02-01'
+          }
+        ]
       },
       {
         // id: 3000,
@@ -336,7 +355,8 @@ export default {
       this.$refs.xTable.exportData({
         filename: '导出test',
         sheetName: 'Sheet1',
-        type: 'xlsx'
+        type: 'csv',
+        alignSeqPrefix: 'No '
       })
     }
   }
